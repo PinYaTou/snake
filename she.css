@@ -1,0 +1,91 @@
+*{
+    padding:0;
+    margin:0;
+   }
+   html,body{
+    width:100%;
+    height:100%;
+   }
+   body{
+    position:relative;
+   }
+   input {
+       width: 60px;
+       height: 30px;
+       position: absolute;
+       top: 75px;
+       left: 440px;
+
+   }
+   #start {
+    left: 366px;
+   }
+   #showscore{
+    font-size:18px ;
+    position: absolute;
+    top: 76px;
+    left: 550px;
+    border: none;
+   }
+   #truescore {
+    font-size:18px ;
+    position: absolute;
+    top: 77px;
+    left: 600px;
+    border: none;
+   }
+   #chooseSpace {
+    font-size:18px ;
+    position: absolute;
+    top: 77px;
+    right: 500px;
+    border: none;
+   }
+   #spaces {
+    font-size: 18px;
+    position: absolute;
+    top: 78px;
+    right: 380px;
+    border: none;
+    outline: none;
+   }
+   #scoretab {
+       position: absolute;
+       width: 200px;
+       height: 200px;
+       border: 2px solid red;
+       top: 200px;
+       right: 60px;
+   }
+   #scoretab div {
+       text-align: center;
+       color: red;
+       margin: 30px auto;
+   }
+   div#container{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin:auto;
+    width:800px;
+    height:500px;
+    border:1px solid black;
+    font-size:0px;
+   }
+   span{
+    display:inline-block;
+    border:1px solid black;
+    box-sizing:border-box;
+   }
+   span.snake{
+    position:absolute;
+    background-color:red;
+    border-radius: 50%;
+   }
+   span.food{
+    position:absolute;
+    background-color:blue;
+    border-radius: 50%;
+   }

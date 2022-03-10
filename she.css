@@ -74,18 +74,39 @@
     border:1px solid black;
     font-size:0px;
    }
-   span{
+   /*span{
     display:inline-block;
     border:1px solid black;
     box-sizing:border-box;
-   }
-   span.snake{
-    position:absolute;
-    background-color:red;
-    border-radius: 50%;
-   }
-   span.food{
+   }*/
+   .food{
     position:absolute;
     background-color:blue;
     border-radius: 50%;
+    width: 50px;
+    height: 50px;
+   }
+   .head {
+       position: absolute;
+        background-color: green;
+        width: 50px;
+        height: 50px;
+   }
+   .headRight {
+       border-radius: 0 25px 25px 0;
+   }
+   .headLeft {
+        border-radius: 25px 0 0 25px;
+   }
+   .headTop {
+        border-radius: 25px 25px 0 0;
+   }
+   .headBottom {
+        border-radius: 0 0 25px 25px;
+   }
+   .snakeBody {
+        position:absolute;
+       background-color: red;
+       width: 50px;
+       height: 50px;
    }

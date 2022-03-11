@@ -54,7 +54,7 @@ window.onload = () => {
                 break;
         }
     }
-    scores(score);
+    scores(snake.length - 5);
 
 };
 isInSnakeBody = (left, top) => {
@@ -108,7 +108,7 @@ snakeMove = () => {
     if (newLeft > con.offsetWidth - 2 - 1 || newLeft < -2 || newTop < 0 || newTop > con.offsetHeight - 2 - 1) {
         clearInterval(timer);
         alert("撞墙了!");
-        scores(score);
+        scores(snake.length - 5);
         window.location.reload();
     }
     //判断新蛇头的位置是不是在蛇身体里面
@@ -116,14 +116,14 @@ snakeMove = () => {
         if (snake[i].offsetLeft == newLeft && snake[i].offsetTop == newTop) {
             clearInterval(timer);
             alert("吃到自己了！");
-            scores(score);
+            scores(snake.length - 5);
             window.location.reload();
         }
     }
     //1.如果吃到食物
     if (newLeft == food.offsetLeft && newTop == food.offsetTop) {
         snake[snake.length-1].className = 'snakeBody';
-        food.className = "snakeHead";
+        food.className = "head";
         snake.push(food); 
         truescore.innerHTML = snake.length - 5;
         showFood();
@@ -159,10 +159,12 @@ scores = (score) => {
     else if (score < localStorage.second && score > localStorage.third) {
         localStorage.second = score;
     }
+    else {
+        localStorage.first = localStorage.first || 0;
+        localStorage.second = localStorage.second || 0;
+        localStorage.third = localStorage.third || 0;
+    }
 
-    localStorage.first = localStorage.first || 0;
-    localStorage.second = localStorage.second || 0;
-    localStorage.third = localStorage.third || 0;
     firstscore.innerHTML = "第一名" + localStorage.first + "分";
     secondscore.innerHTML = "第二名" + localStorage.second + "分";
     thirdscore.innerHTML = "第三名" + localStorage.third + "分";

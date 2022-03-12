@@ -91,28 +91,11 @@ createSnake = () => {
         snake.push(newBody);
     }
 }
-snakeMove = () => {
-    var con = document.getElementById("container");
-    //蛇头移动
-    var head = snake[snake.length - 1];
-    var newTop = head.offsetTop, newLeft = head.offsetLeft;
-    switch (dir) {
-        case DIR.DIR_LEFT: newLeft -= box.width; break;
-        case DIR.DIR_RIGHT: newLeft += box.width; break;
-        case DIR.DIR_TOP: newTop -= box.height; break;
-        case DIR.DIR_BOTTOM: newTop += box.height; break;
-        default: break;
-    }
-
-    //撞墙游戏结束
-    if (newLeft > con.offsetWidth - 2 - 1 || newLeft < -2 || newTop < 0 || newTop > con.offsetHeight - 2 - 1) {
-        clearInterval(timer);
-        alert("撞墙了!");
-        scores(snake.length - 5);
-        window.location.reload();
-    }
-    //判断新蛇头的位置是不是在蛇身体里面
-    for (var i = 0; i < snake.length - 1; i++) {
+getSnakeHead = () => {
+    return snake[snake.length - 1] ;
+}
+isEatSelf = (newLeft,newTop) => {
+    for (let i = 0; i < snake.length - 1; i++) {
         if (snake[i].offsetLeft == newLeft && snake[i].offsetTop == newTop) {
             clearInterval(timer);
             alert("吃到自己了！");
@@ -120,10 +103,86 @@ snakeMove = () => {
             window.location.reload();
         }
     }
+}
+/*isEatFood = (newLeft,newTop,newHeadClass) => {
+    if (newLeft == food.offsetLeft && newTop == food.offsetTop) {
+        getSnakeHead().className = 'snakeBody';
+        food.className = newHeadClass;
+        snake.push(food); 
+        truescore.innerHTML = snake.length - 5;
+        showFood();
+        return;
+    }
+}*/
+/*isHitWall = (newLeft,newTop) => {
+    if (newLeft > con.offsetWidth - 2 - 1 || newLeft < 0 || newTop < 0 || newTop > con.offsetHeight - 2 -1) {
+        clearInterval(timer);
+        alert("撞墙了!");
+        scores(snake.length - 5);
+        window.location.reload();
+    }
+} */
+throughWall = (newLeft,newTop) => {
+    let head = getSnakeHead();
+    if(newLeft > con.offsetWidth - 2 - 1) {
+        head.style.left = '0px';
+    }
+    else if (newLeft < 0) {
+        head.style.left = '750px';
+    }
+    else if (newTop > con.offsetHeight - 2 -1){
+        head.style.top = '0px';
+    }
+    else if (newTop < 0 ){
+        head.style.top = '450px';
+    }
+    else {
+        head.style.left = newLeft + "px";
+        head.style.top = newTop + "px";
+    }
+}
+snakeMove = () => {
+    var con = document.getElementById("container");
+    //蛇头移动
+    var head = getSnakeHead();
+    var newTop = head.offsetTop, newLeft = head.offsetLeft;
+    let newHeadClass = "head "; 
+    switch (dir) {
+        case DIR.DIR_LEFT: {
+            newLeft -= box.width
+            newHeadClass += "headLeft";
+        }; 
+        break;
+        case DIR.DIR_RIGHT:{
+            newLeft += box.width;
+            newHeadClass += "headRight";
+        };
+        break;
+        case DIR.DIR_TOP:{
+            newTop -= box.height; 
+            newHeadClass += "headTop";
+        };
+        break;
+        case DIR.DIR_BOTTOM:{
+            newTop += box.height;
+            newHeadClass += "headBottom";
+        };
+        break;
+        default: break;
+    }
+
+    //撞墙游戏结束
+    /*if( head.style.left > con.offsetWidth - 2 - 1){
+        
+        head.style.left = '0 px';
+    }*/
+    //isHitWall(newLeft,newTop);
+    //判断新蛇头的位置是不是在蛇身体里面
+    isEatSelf(newLeft,newTop);
     //1.如果吃到食物
     if (newLeft == food.offsetLeft && newTop == food.offsetTop) {
-        snake[snake.length-1].className = 'snakeBody';
-        food.className = "head";
+        getSnakeHead().className = 'snakeBody';
+        food.className = newHeadClass;
         snake.push(food); 
         truescore.innerHTML = snake.length - 5;
         showFood();
@@ -131,15 +190,11 @@ snakeMove = () => {
     }
     //2.如果没吃到
     //除蛇头外身体移动
-    for (var i = 0; i < snake.length - 1; i++) {
-        snake[i].style.top = snake[i + 1].offsetTop + "px";
-        snake[i].style.left = snake[i + 1].offsetLeft + "px";
-    }
     head.style.left = newLeft + "px";
     head.style.top = newTop + "px";
-    changeHead(dir);
-    
-
+    throughWall(newLeft,newTop);
+    moveBody();
+    changeHead(dir,newLeft,newTop);
 
 }
 //计算排名
@@ -170,18 +225,24 @@ scores = (score) => {
     thirdscore.innerHTML = "第三名" + localStorage.third + "分";
 }
 changeHead = (direction) => {
-    let i = snake.length - 1;
+    let head = getSnakeHead();
     if (direction == DIR.DIR_RIGHT) {
-        snake[i].className = 'head headRight';
+        head.className = 'head headRight';
     }
     if (direction == DIR.DIR_LEFT) {
-        snake[i].className = 'head headLeft';
+        head.className = 'head headLeft';
 
     }
     if (direction == DIR.DIR_BOTTOM) {
-        snake[i].className = 'head headBottom';
+        head.className = 'head headBottom';
     }
     if (direction == DIR.DIR_TOP) {
-        snake[i].className = 'head headTop';
+        head.className = 'head headTop';
+    }
+}
+moveBody = () => {
+    for (let i = 0; i < snake.length - 1; i++) {
+        snake[i].style.top = snake[i + 1].offsetTop+ "px";
+        snake[i].style.left = snake[i + 1].offsetLeft  + "px";
     }
 }

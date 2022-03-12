@@ -10,85 +10,91 @@
     position:relative;
    }
    input {
-       width: 60px;
-       height: 30px;
-       position: absolute;
-       top: 75px;
-       left: 440px;
-
+    width: 60px;
+    height: 30px;
+    position: absolute;
+    top: 35px;
+    left: 74px;
    }
    #start {
-    left: 366px;
+    left: 0;
    }
    #showscore{
     font-size:18px ;
     position: absolute;
-    top: 76px;
-    left: 550px;
+    top: 36px;
+    left: 150px;
     border: none;
    }
    #truescore {
     font-size:18px ;
     position: absolute;
-    top: 77px;
-    left: 600px;
+    top: 37px;
+    left: 200px;
     border: none;
+    color: red;
    }
    #chooseSpace {
     font-size:18px ;
     position: absolute;
-    top: 77px;
-    right: 500px;
+    top: 97px;
+    left: 0;
     border: none;
    }
    #spaces {
     font-size: 18px;
     position: absolute;
-    top: 78px;
-    right: 380px;
+    top: 99px;
+    left: 100px;
     border: none;
     outline: none;
    }
    #scoretab {
-       position: absolute;
-       width: 200px;
-       height: 200px;
-       border: 2px solid red;
-       top: 200px;
-       right: 60px;
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    border: 2px solid red;
+    top: 30px;
+    right: 0;
    }
    #scoretab div {
-       text-align: center;
-       color: red;
-       margin: 30px auto;
+    text-align: center;
+    color: red;
+    margin: 10px auto;
+   }
+   #showPart {
+    position:absolute;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width:800px;
+    height: auto;
    }
    div#container{
     position:absolute;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
-    margin:auto;
+    margin-top: 150px;
+    margin-left: 50%;
+    transform: translateX(-50%);
     width:800px;
     height:500px;
-    border:1px solid black;
-    font-size:0px;
+    border: 1px solid red;
+    font-size: 0px;
+    background-color: skyblue;
    }
-   /*span{
+   /*span{   
     display:inline-block;
     border:1px solid black;
     box-sizing:border-box;
    }*/
    .food{
     position:absolute;
-    background-color:blue;
     border-radius: 50%;
     width: 50px;
     height: 50px;
+    background: url(food.png) no-repeat center center/50px 50px;
    }
    .head {
         position: absolute;
-        background-color: green;
+        background: url(snake.png) no-repeat center center/50px 50px; 
         width: 50px;
         height: 50px;
    }
@@ -97,16 +103,21 @@
    }
    .headLeft {
         border-radius: 25px 0 0 25px;
+        transform: rotate(180deg);
    }
    .headTop {
         border-radius: 25px 25px 0 0;
+        transform: rotate(-90deg);
    }
+   
    .headBottom {
         border-radius: 0 0 25px 25px;
+        transform: rotate(90deg);
    }
    .snakeBody {
        position:absolute;
-       background-color: red;
+       background-color: #9ccc65;
        width: 50px;
        height: 50px;
+       border-radius: 50%;
    }

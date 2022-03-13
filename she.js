@@ -1,5 +1,5 @@
-var box = { width: 50, height: 50 };//每一个方块的高度
-var snake = [];//保存蛇每一节身体对应的span
+var box = { width: 50, height: 50 };
+var snake = [];
 var DIR = {
     DIR_RIGHT: 1,
     DIR_LEFT: 2,
@@ -7,19 +7,14 @@ var DIR = {
     DIR_BOTTOM: 4
 };
 var dir = DIR.DIR_RIGHT;
-var food = null; //始终记录当前的食物 
+var food = null;
 var timer;
 var start = document.getElementById('start');
 var pause = document.getElementById('pause');
 var con = document.getElementById("container");
 window.onload = () => {
-    //1.初始化地图
-    //initMap();
-    //2.创建蛇
-    //2.5随机显示食物
-    showFood();
+    createFood();
     createSnake();
-    //3.让蛇动起来
     start.onclick = () => {
         clearInterval(timer);
         let spaceIndex = spaces.selectedIndex;
@@ -29,11 +24,10 @@ window.onload = () => {
     pause.onclick = () => {
         clearInterval(timer);
     }
-    //4.控制蛇移动
     document.onkeyup = function (e) {
         switch (e.key) {
             case 'ArrowUp':
-                if (dir != DIR.DIR_BOTTOM) {   // 不允许返回，向上的时候不能向下
+                if (dir != DIR.DIR_BOTTOM) {  
                     dir = DIR.DIR_TOP;
                 }
                 break;
@@ -54,7 +48,7 @@ window.onload = () => {
                 break;
         }
     }
-    scores(snake.length - 5);
+    ranks(snake.length - 5);
 
 };
 isInSnakeBody = (left, top) => {
@@ -64,8 +58,7 @@ isInSnakeBody = (left, top) => {
         }
     }
 };
-//随机生成食物。
-showFood = () => {
+createFood = () => {
     food = document.createElement("span");
     food.className = "food";
     var left, top;
@@ -94,15 +87,15 @@ createSnake = () => {
 getSnakeHead = () => {
     return snake[snake.length - 1] ;
 }
-isEatSelf = (newLeft,newTop) => {
-    for (let i = 0; i < snake.length - 1; i++) {
-        if (snake[i].offsetLeft == newLeft && snake[i].offsetTop == newTop) {
-            clearInterval(timer);
-            alert("吃到自己了！");
-            scores(snake.length - 5);
-            window.location.reload();
-        }
-    }
+isEatSelf = (newLeft,newTop) => {;
+    return snake.slice(0,snake.length - 1).some(body =>
+    {return body.offsetLeft === newLeft && body.offsetTop == newTop});
+}
+GameOverOfEatSelf = () => {
+    clearInterval(timer);
+    alert("吃到自己了！");
+    ranks(snake.length - 5);
+    window.location.reload();
 }
 throughWall = (newLeft,newTop) => {
     let head = getSnakeHead();
@@ -124,54 +117,44 @@ moveHead = (head,newLeft,newTop) => {
     head.style.left = newLeft + "px";
     head.style.top = newTop + "px";
 }
-snakeMove = () => {
-    var con = document.getElementById("container");
-    //蛇头移动
-    var head = getSnakeHead();
-    var newTop = head.offsetTop, newLeft = head.offsetLeft;
-    let newHeadClass = "head "; 
+isEatFood = (newLeft,newTop) => {
+    return newLeft == food.offsetLeft && newTop == food.offsetTop; 
+}
+foodPush = () => {
+    food.className =  getSnakeHead().className;
+    getSnakeHead().className = 'snakeBody';
+    snake.push(food); 
+    truescore.innerHTML = snake.length - 5;
+    createFood();
+    return;
+}
+getLocation = (newLeft,newTop) => {
     switch (dir) {
-        case DIR.DIR_LEFT: {
-            newLeft -= box.width
-            newHeadClass += "headLeft";
+        case DIR.DIR_LEFT: 
+        return {
+            newLeft : newLeft - box.width,
+            newTop : newTop,
         }; 
-        break;
-        case DIR.DIR_RIGHT:{
-            newLeft += box.width;
-            newHeadClass += "headRight";
+        case DIR.DIR_RIGHT:
+        return {
+            newLeft: newLeft + box.width,
+            newTop : newTop,
         };
-        break;
-        case DIR.DIR_TOP:{
-            newTop -= box.height; 
-            newHeadClass += "headTop";
+        case DIR.DIR_TOP:
+        return {
+            newLeft : newLeft,
+            newTop: newTop - box.height,
         };
-        break;
-        case DIR.DIR_BOTTOM:{
-            newTop += box.height;
-            newHeadClass += "headBottom";
+        case DIR.DIR_BOTTOM:
+        return {
+            newLeft : newLeft,
+            newTop : newTop + box.height,
         };
-        break;
         default: break;
     }
-
-
-    isEatSelf(newLeft,newTop);
-    if (newLeft == food.offsetLeft && newTop == food.offsetTop) {
-        getSnakeHead().className = 'snakeBody';
-        food.className = newHeadClass;
-        snake.push(food); 
-        truescore.innerHTML = snake.length - 5;
-        showFood();
-        return;
-    }
-    moveBody();
-    moveHead(head,newLeft,newTop);
-    throughWall(newLeft,newTop);
-    changeHead(dir,newLeft,newTop);
-
 }
-//计算排名
-scores = (score) => {
+
+ranks = (score) => {
     if (score > localStorage.first) {
         let t1 = localStorage.first;
         let t2 = localStorage.second;
@@ -218,4 +201,15 @@ moveBody = () => {
         snake[i].style.top = snake[i + 1].offsetTop+ "px";
         snake[i].style.left = snake[i + 1].offsetLeft  + "px";
     }
+}
+snakeMove = () => {
+    const {offsetTop:top ,offsetLeft:left} = getSnakeHead();
+    const newTop = top, newLeft = left;
+    const obj = getLocation(newLeft,newTop);
+    isEatSelf(obj.newLeft,obj.newTop) && GameOverOfEatSelf();
+    moveBody();
+    changeHead(dir);
+    isEatFood(obj.newLeft,obj.newTop) && foodPush();
+    moveHead(getSnakeHead(),obj.newLeft,obj.newTop);
+    throughWall(obj.newLeft,obj.newTop);
 }

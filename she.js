@@ -31,23 +31,23 @@ window.onload = () => {
     }
     //4.控制蛇移动
     document.onkeyup = function (e) {
-        switch (e.keyCode) {
-            case 38:
+        switch (e.key) {
+            case 'ArrowUp':
                 if (dir != DIR.DIR_BOTTOM) {   // 不允许返回，向上的时候不能向下
                     dir = DIR.DIR_TOP;
                 }
                 break;
-            case 40:
+            case 'ArrowDown':
                 if (dir != DIR.DIR_TOP) {
                     dir = DIR.DIR_BOTTOM;
                 }
                 break;
-            case 37:
+            case 'ArrowLeft':
                 if (dir != DIR.DIR_RIGHT) {
                     dir = DIR.DIR_LEFT;
                 }
                 break;
-            case 39:
+            case 'ArrowRight':
                 if (dir != DIR.DIR_LEFT) {
                     dir = DIR.DIR_RIGHT;
                 }
@@ -104,24 +104,6 @@ isEatSelf = (newLeft,newTop) => {
         }
     }
 }
-/*isEatFood = (newLeft,newTop,newHeadClass) => {
-    if (newLeft == food.offsetLeft && newTop == food.offsetTop) {
-        getSnakeHead().className = 'snakeBody';
-        food.className = newHeadClass;
-        snake.push(food); 
-        truescore.innerHTML = snake.length - 5;
-        showFood();
-        return;
-    }
-}*/
-/*isHitWall = (newLeft,newTop) => {
-    if (newLeft > con.offsetWidth - 2 - 1 || newLeft < 0 || newTop < 0 || newTop > con.offsetHeight - 2 -1) {
-        clearInterval(timer);
-        alert("撞墙了!");
-        scores(snake.length - 5);
-        window.location.reload();
-    }
-} */
 throughWall = (newLeft,newTop) => {
     let head = getSnakeHead();
     if(newLeft > con.offsetWidth - 2 - 1) {
@@ -136,10 +118,11 @@ throughWall = (newLeft,newTop) => {
     else if (newTop < 0 ){
         head.style.top = '450px';
     }
-    else {
-        head.style.left = newLeft + "px";
-        head.style.top = newTop + "px";
-    }
+
+}
+moveHead = (head,newLeft,newTop) => {
+    head.style.left = newLeft + "px";
+    head.style.top = newTop + "px";
 }
 snakeMove = () => {
     var con = document.getElementById("container");
@@ -171,15 +154,8 @@ snakeMove = () => {
         default: break;
     }
 
-    //撞墙游戏结束
-    /*if( head.style.left > con.offsetWidth - 2 - 1){
-        
-        head.style.left = '0 px';
-    }*/
-    //isHitWall(newLeft,newTop);
-    //判断新蛇头的位置是不是在蛇身体里面
+
     isEatSelf(newLeft,newTop);
-    //1.如果吃到食物
     if (newLeft == food.offsetLeft && newTop == food.offsetTop) {
         getSnakeHead().className = 'snakeBody';
         food.className = newHeadClass;
@@ -188,12 +164,9 @@ snakeMove = () => {
         showFood();
         return;
     }
-    //2.如果没吃到
-    //除蛇头外身体移动
-    head.style.left = newLeft + "px";
-    head.style.top = newTop + "px";
-    throughWall(newLeft,newTop);
     moveBody();
+    moveHead(head,newLeft,newTop);
+    throughWall(newLeft,newTop);
     changeHead(dir,newLeft,newTop);
 
 }

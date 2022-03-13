@@ -23,14 +23,38 @@
      flex-direction: column;
      justify-content: space-between;
     }
-   input {
+    .leftPart input {
     width: 60px;
     height: 30px;
+   }
+   .middlePart {
+     height: 100%;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     align-items: center;
+   }
+   .middlePart audio {
+        display: none;
+   }
+   .middlePart input {
+     width: 80px;
+     height: 40px;
+     margin-left: 10px; 
+   }
+   .middlePart .middlePartBpttom input {
+        width: 120px;
    }
    .rightPart {
      height: 100%;
      display: flex;
+     flex-direction: column;
+     justify-content: space-between;
      align-items: center;
+   }
+   .rightPart .rank {
+        color: red;
+        font-size: 24px;
    }
    #showscore{
     font-size:18px ;

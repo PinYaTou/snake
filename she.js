@@ -9,6 +9,7 @@ var DIR = {
 var dir = DIR.DIR_RIGHT;
 var food = null;
 var timer;
+var eatBgm = true;
 var start = document.getElementById('start');
 var pause = document.getElementById('pause');
 var con = document.getElementById("container");
@@ -49,8 +50,28 @@ window.onload = () => {
         }
     }
     ranks(snake.length - 5);
+    Bgm();
 
 };
+eatFoodBgn = () => {
+    openEatBgm.onclick = () => {
+        if(eatBgm == false) eatBgm = true;
+    }
+    closeEatBgm.onclick = () => {
+        if(eatBgm == true) eatBgm = false;
+    }
+    if(eatBgm ){
+        eatBgmAudio.play();
+    }
+}
+Bgm = () => {
+    playBgm.onclick = () =>{
+        bgmAudio.play();
+    };
+    pauseBgm.onclick = () => {
+        bgmAudio.pause();
+    }
+}
 isInSnakeBody = (left, top) => {
     for (var i = 0; i < snake.length; i++) {
         if (snake[i].offsetTop == top && snake[i].offsetLeft == left) {
@@ -122,11 +143,12 @@ isEatFood = (newLeft,newTop) => {
     (newLeft == food.offsetLeft + box.width && newTop == food.offsetTop) ||
     (newLeft == food.offsetLeft - box.width && newTop == food.offsetTop) ||
     (newLeft == food.offsetLeft && newTop == food.offsetTop - box.height) ||
-    (newLeft == food.offsetLeft && newTop == food.offsetTop + box.height) ; 
+    (newLeft == food.offsetLeft && newTop == food.offsetTop + box.height); 
 }
 foodPush = () => {
     food.className =  getSnakeHead().className;
     getSnakeHead().className = 'snakeBody';
+    eatFoodBgn();
     snake.push(food); 
     truescore.innerHTML = snake.length - 5;
     createFood();

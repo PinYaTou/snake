@@ -8,21 +8,31 @@
  </head>
  <body>
      <div id="showPart">
-        <input type="button" name="" id="start" value="开始">
-        <input type="button" id="pause" value="暂停">
-        <span id="showscore">分数：</span>
-        <span id="truescore">0</span>
-        <span id="chooseSpace">请选择速度:</span>
-        <select name="" id="spaces">
-            <option value="200">0.2S 走一下</option>
-            <option value="500">0.5S 走一下</option>
-            <option value="1000">1S 走一下</option>
-        </select>
-        <div id="scoretab">
-            <div id="firstscore"></div>
-            <div id="secondscore"></div> 
-            <div id="thirdscore"></div>
-        </div>
+         <div class="leftPart">
+             <div class="leftTopPart">
+                <input type="button" name="" id="start" value="开始">
+                <input type="button" id="pause" value="暂停">
+                <span id="showscore">分数：</span>
+                <span id="truescore">0</span>
+                
+             </div>
+             <div class="leftBottoomPart">
+                <span id="chooseSpace">请选择速度:</span>
+                <select name="" id="spaces">
+                    <option value="200">0.2S 走一下</option>
+                    <option value="500">0.5S 走一下</option>
+                    <option value="1000">1S 走一下</option>
+                </select>
+             </div>
+         </div>
+         <div class="rightPart">
+            <div id="scoretab">
+                <div id="firstscore"></div>
+                <div id="secondscore"></div> 
+                <div id="thirdscore"></div>
+            </div>
+         </div>
+
      </div>
      
      <div id="container"></div>

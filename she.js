@@ -118,7 +118,11 @@ moveHead = (head,newLeft,newTop) => {
     head.style.top = newTop + "px";
 }
 isEatFood = (newLeft,newTop) => {
-    return newLeft == food.offsetLeft && newTop == food.offsetTop; 
+    return (newLeft == food.offsetLeft && newTop == food.offsetTop) || 
+    (newLeft == food.offsetLeft + box.width && newTop == food.offsetTop) ||
+    (newLeft == food.offsetLeft - box.width && newTop == food.offsetTop) ||
+    (newLeft == food.offsetLeft && newTop == food.offsetTop - box.height) ||
+    (newLeft == food.offsetLeft && newTop == food.offsetTop + box.height) ; 
 }
 foodPush = () => {
     food.className =  getSnakeHead().className;

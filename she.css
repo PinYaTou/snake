@@ -42,6 +42,14 @@
      height: 40px;
      margin-left: 10px; 
    }
+   #chooseBgm {
+     font-size: 18px;
+   }
+   #bgmChange {
+     font-size: 18px;
+     border: none;
+     outline: none;
+   }
    .middlePart .middlePartBpttom input {
         width: 120px;
    }

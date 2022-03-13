@@ -21,6 +21,7 @@ window.onload = () => {
         let spaceIndex = spaces.selectedIndex;
         let newSpace = spaces.options[spaceIndex].value;
         timer = setInterval(snakeMove, newSpace);
+        Bgm();
     }
     pause.onclick = () => {
         clearInterval(timer);
@@ -50,8 +51,7 @@ window.onload = () => {
         }
     }
     ranks(snake.length - 5);
-    Bgm();
-
+   
 };
 eatFoodBgn = () => {
     openEatBgm.onclick = () => {
@@ -65,6 +65,9 @@ eatFoodBgn = () => {
     }
 }
 Bgm = () => {
+    let bgmChangeIndex = bgmChange.selectedIndex;
+    let newBgm = bgmChange.options[bgmChangeIndex].value;
+    bgmAudio.src = newBgm;
     playBgm.onclick = () =>{
         bgmAudio.play();
     };

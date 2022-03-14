@@ -13,17 +13,25 @@ var foodDisappearTimer;
 var foodAppearTimer;
 var eatBgm = true;
 var beginOrPuase = true;
-var start = document.getElementById('start');
-var pause = document.getElementById('pause');
-var con = document.getElementById("container");
+const playOrPauseGame = document.getElementById('playAndPauseGame');
+var checkplayOrPauseGame = true;
+const playOrPauseBgm = document.getElementById('playAndPauseBgm');
+var checkplayOrPauseBgm = true;
+const playOrPauseSoundEffects = document.getElementById('playAndPauseSoundEffects');
+var checkplayOrPauseSoundEffects = true;
+const con = document.getElementById("container");
 window.onload = () => {
     createFood();
     createSnake();
-    start.onclick = () => {
-        gameBegin();
-    }
-    pause.onclick = () => {
-        gamePuase();
+    playOrPauseGame.onclick = () => {
+        if(checkplayOrPauseGame){
+             gameBegin();
+             checkplayOrPauseGame = false;
+        }
+        else {
+            gamePuase();
+            checkplayOrPauseGame = true;
+        }
     }
     document.onkeyup = function (e) {
         switch (e.key) {
@@ -60,7 +68,7 @@ window.onload = () => {
         }
     }
     ranks(snake.length - 5);
-
+    
 };
 eatFoodBgm = () => {
         eatBgmAudio.play();
@@ -69,18 +77,32 @@ controlBgm = () => {
     let bgmChangeIndex = bgmChange.selectedIndex;
     let newBgm = bgmChange.options[bgmChangeIndex].value;
     bgmAudio.src = newBgm;
-    enablePlayBgm.onclick = () =>{
-        bgmAudio.play();
+    bgmAudio.play();
+    playOrPauseBgm.onclick = () =>{
+        if(checkplayOrPauseBgm){
+            bgmAudio.play();
+            checkplayOrPauseBgm = false;
+            playOrPauseBgm.style.background = 'url(resources/bgm-on.svg) no-repeat center center/30px 30px';
+        }
+        else {
+            bgmAudio.pause();
+            checkplayOrPauseBgm = true;
+            playOrPauseBgm.style.background = 'url(resources/bgm-off.svg) no-repeat center center/30px 30px';
+        }   
     };
-    disablePlayBgm.onclick = () => {
-        bgmAudio.pause();
+    playOrPauseSoundEffects.onclick = () => {
+        if(checkplayOrPauseSoundEffects){
+            eatBgm = true;
+            checkplayOrPauseSoundEffects = false;
+            playOrPauseSoundEffects.style.background = 'url(resources/music-on.svg) no-repeat center center/30px 30px';
+        }
+        else {
+            eatBgm = false;
+            checkplayOrPauseSoundEffects = true;
+            playOrPauseSoundEffects.style.background = 'url(resources/music-off.svg) no-repeat center center/30px 30px';
+        }
     }
-    enableOpenEatBgm.onclick = () => {
-        eatBgm = true;
-   }
-   disableOpenEatBgm.onclick = () => {
-      eatBgm = false;
-   }
+
 }
 isInSnakeBody = (left, top) => {
     for (var i = 0; i < snake.length; i++) {
@@ -236,6 +258,7 @@ snakeMove = () => {
     isEatFood(obj.newLeft,obj.newTop) && foodPush();
     moveHead(getSnakeHead(),obj.newLeft,obj.newTop);
     throughWall(obj.newLeft,obj.newTop);
+ 
 }
 reStart = () => {
     const reStartButton = document.getElementById('reStartButton');
@@ -260,10 +283,12 @@ gameBegin = () => {
     timer = setInterval(snakeMove, newSpace);
     controlBgm ();
     foodFlashing();
+    playOrPauseGame.style.background = 'url(resources/play.svg) no-repeat center center/40px 40px';
 }
 gamePuase = () => {
     clearInterval(timer);
     bgmAudio.pause();
     clearInterval(foodDisappearTimer);
     clearInterval(foodAppearTimer);
+    playOrPauseGame.style.background = 'url(resources/pause.svg) no-repeat center center/40px 40px';
 }

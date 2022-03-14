@@ -26,31 +26,24 @@
         
      </div>
      <div id="showPart">
-         <div class="leftPart">
-             <div class="leftTopPart">
-                <input type="button" name="" id="start" value="开始">
-                <input type="button" id="pause" value="暂停">
-                <span id="showscore">分数：</span>
-                <span id="truescore">0</span>
-                
-             </div>
-             <div class="leftBottoomPart">
+
+        <div class="leftPart">
                 <span id="chooseSpace">请选择速度:</span>
                 <select name="" id="spaces">
                     <option value="200">0.2S 走一下</option>
                     <option value="500">0.5S 走一下</option>
                     <option value="1000">1S 走一下</option>
                 </select>
-             </div>
+        </div>
+        <div class="middlePart">
+            <span id="showscore">分数：</span>
+             <span id="truescore">0</span>
+               
          </div>
-         <div class="middlePart">
+        <div class="rightPart">
              <audio src="resources/BGM.mp3" autoplay = "autoplay" id="bgmAudio"></audio>
              <audio src="resources/eatBgm.mp3" id="eatBgmAudio"></audio>
-             <div class="middlePartTop">
-                <input type="button" name="" id="enablePlayBgm" value="播放BGM">
-                <input type="button" id="disablePlayBgm" value="暂停BGM">
-             </div>
-             <div class="middlePartMiddle">
+             <div class="rightPartMiddle">
                 <span id="chooseBgm">请选择BGM:</span>
                 <select name="" id="bgmChange">
                     <option value="resources/BGM.mp3">原始BGM</option>
@@ -58,16 +51,13 @@
                     <option value="resources/Mariage d'amour.mp3">Mariage d'amour</option>
                 </select>
              </div>
-             <div class="middlePartBpttom">
-                <input type="button" name="" id="enableOpenEatBgm" value="打开吃到食物音效">
-                <input type="button" id="disableOpenEatBgm" value="关闭吃到食物音效">
-             </div>
          </div>
 
      </div>
      <div id="container">
-        
-
+        <div class="playAndPauseGame" id="playAndPauseGame"></div>
+         <div class="playAndPauseBgm" id="playAndPauseBgm" ></div>
+         <div class="playAndPauseSoundEffects" id="playAndPauseSoundEffects" ></div>
      </div>
 
 

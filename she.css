@@ -17,30 +17,8 @@
      display: flex;
      justify-content: space-between;
     }
-    .leftPart {
-     height: 100%;
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-    }
-    .leftPart input {
-    width: 60px;
-    height: 30px;
-   }
-   .middlePart {
-     height: 100%;
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-     align-items: center;
-   }
    .middlePart audio {
         display: none;
-   }
-   .middlePart input {
-     width: 80px;
-     height: 40px;
-     margin-left: 10px; 
    }
    #chooseBgm {
      font-size: 18px;
@@ -50,20 +28,7 @@
      border: none;
      outline: none;
    }
-   .middlePart .middlePartBpttom input {
-        width: 120px;
-   }
-   .rightPart {
-     height: 100%;
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-     align-items: center;
-   }
-   .rightPart .rank {
-        color: red;
-        font-size: 24px;
-   }
+
    #showscore{
     font-size:18px ;
     border: none;
@@ -89,6 +54,34 @@
     height:300px;
     border: 5px solid rgb(66, 79, 88);
     font-size: 0px;
+    position: relative;
+   }
+   .playAndPauseGame {
+    position: absolute; 
+    width: 30px;
+    height: 30px;
+    left: -5px;
+    bottom: -35px;
+    background: url(resources/pause.svg) no-repeat center center/40px 40px;
+    cursor: pointer;
+   }
+   .playAndPauseBgm {
+    position: absolute; 
+    width: 30px;
+    height: 30px;
+    right: 35px;
+    bottom: -35px;
+    background: url(resources/bgm-on.svg) no-repeat center center/30px 30px;
+    cursor: pointer;
+   }
+   .playAndPauseSoundEffects {
+    position: absolute; 
+    width: 30px;
+    height: 30px;
+    right: 0;
+    bottom: -35px;
+    background: url(resources/music-on.svg) no-repeat center center/30px 30px;
+    cursor: pointer;
    }
   .mask {
     position: absolute;;

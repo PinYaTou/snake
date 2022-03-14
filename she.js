@@ -113,7 +113,7 @@ isInSnakeBody = (left, top) => {
 };
 createFood = () => {
     food = document.createElement("span");
-    food.className = "node food";
+    food.className = "node food";    
     var left, top;
     do {
         left = Math.floor((con.offsetWidth - 10) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
@@ -122,20 +122,44 @@ createFood = () => {
     food.style.left = left + "px";
     food.style.top = top + "px";
     con.appendChild(food);
-}
+};
 createSnake = () => {
     var newBody = null;
-    for (var i = 1; i <= 5; i++) {
-        newBody = document.createElement("span");
-        newBody.className = 'node body';
-        newBody.style.left = (i - 1) * BOX.WIDTH + "px";
-        newBody.style.top = "0px";
-        if (i == 5) {
-            newBody.className = 'node head';
+    var left, top;
+    const directionOfSnake = Math.floor(Math.random()*10);
+    if(directionOfSnake >= 0 && directionOfSnake <= 4){
+        left = Math.floor((con.offsetWidth - 10 - 4 * BOX.WIDTH) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
+        top = Math.floor((con.offsetHeight - 10) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
+        for (var i = 1; i <= 5; i++) {
+            newBody = document.createElement("span");
+            newBody.className = 'node body';
+            newBody.style.left = left + "px";
+            newBody.style.top = top + "px";
+            if (i == 5) {
+                newBody.className = 'node head';
+            }
+            con.appendChild(newBody);
+            snake.push(newBody);
+            left += 20;
         }
-        con.appendChild(newBody);
-        snake.push(newBody);
     }
+    else {
+        left = Math.floor((con.offsetWidth - 10 ) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
+        top = Math.floor((con.offsetHeight - 10 -4 * BOX.HEIGHT) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
+        for (var i = 1; i <= 5; i++) {
+            newBody = document.createElement("span");
+            newBody.className = 'node body';
+            newBody.style.left = left + "px";
+            newBody.style.top = top + "px";
+            if (i == 5) {
+                newBody.className = 'node head';
+            }
+            con.appendChild(newBody);
+            snake.push(newBody);
+            top += 20;
+        }
+    }
+ 
 }
 getSnakeHead = () => {
     return snake[snake.length - 1] ;
@@ -152,21 +176,22 @@ gameOverOfEatSelf = () => {
     mask.style.display = 'block';
     settlementPanel.style.display = 'block';
     lastScore.innerHTML = snake.length - 5;
+    bgmAudio.pause();
     reStart();
 }
 throughWall = (newLeft,newTop) => {
     let head = getSnakeHead();
-    if(newLeft > con.offsetWidth - 20 ) {
-        head.style.left = '-1px';
+    if(newLeft > con.offsetWidth - 10 - 6) {
+        head.style.left = '0px';
     }
     else if (newLeft < 0) {
-        head.style.left = '281px';
+        head.style.left = '280px';
     }
-    else if (newTop > con.offsetHeight - 20 -1){
-        head.style.top = '-1px';
+    else if (newTop > con.offsetHeight - 10 - 6){
+        head.style.top = '0px';
     }
     else if (newTop < 0 ){
-        head.style.top = '281px';
+        head.style.top = '280px';
     }
 
 }

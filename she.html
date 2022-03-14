@@ -7,6 +7,24 @@
 
  </head>
  <body>
+    <div class="mask" id="mask">
+        <div class="settlementPanel" id="settlementPanel">
+            <div class="lastScorePart">
+                <span id="showLastScore">你的得分是：</span>
+                <span id="lastScore"></span>
+            </div>
+            <div class="rankPart">
+                <div class="rank">排行榜：</div>
+                <div id="scoretab">
+                   <div id="firstscore"></div>
+                   <div id="secondscore"></div> 
+                   <div id="thirdscore"></div>
+               </div>
+            </div>
+            <div class="restart" id="reStartButton">重新开始</div>
+        </div>
+        
+     </div>
      <div id="showPart">
          <div class="leftPart">
              <div class="leftTopPart">
@@ -45,18 +63,14 @@
                 <input type="button" id="disableOpenEatBgm" value="关闭吃到食物音效">
              </div>
          </div>
-         <div class="rightPart">
-             <div class="rank">排行榜：</div>
-            <div id="scoretab">
-                <div id="firstscore"></div>
-                <div id="secondscore"></div> 
-                <div id="thirdscore"></div>
-            </div>
-         </div>
 
      </div>
-     
-     <div id="container"></div>
+     <div id="container">
+        
+
+     </div>
+
+
      <script src="she.js" ></script>
  </body>
 </html>

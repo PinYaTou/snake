@@ -116,9 +116,13 @@ isEatSelf = (newLeft,newTop) => {;
 }
 gameOverOfEatSelf = () => {
     clearInterval(timer);
-    alert("吃到自己了！");
     ranks(snake.length - 5);
-    window.location.reload();
+    const mask = document.getElementById('mask');
+    const settlementPanel = document.getElementById('settlementPanel');
+    mask.style.display = 'block';
+    settlementPanel.style.display = 'block';
+    lastScore.innerHTML = snake.length - 5;
+    
 }
 throughWall = (newLeft,newTop) => {
     let head = getSnakeHead();
@@ -223,4 +227,11 @@ snakeMove = () => {
     isEatFood(obj.newLeft,obj.newTop) && foodPush();
     moveHead(getSnakeHead(),obj.newLeft,obj.newTop);
     throughWall(obj.newLeft,obj.newTop);
+    reStart();
+}
+reStart = () => {
+    const reStartButton = document.getElementById('reStartButton');
+    reStartButton.onclick = () => {
+        window.location.reload();
+    }
 }

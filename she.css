@@ -18,7 +18,11 @@
      justify-content: space-between;
     }
    .middlePart audio {
-        display: none;
+       display: none;
+   }
+   .rightPartMiddle {
+     display: flex;
+     justify-content:space-between;
    }
    #chooseBgm {
      font-size: 18px;
@@ -28,7 +32,12 @@
      border: none;
      outline: none;
    }
-
+   .ensureChangeBgm {
+     width: 30px;
+     height: 30px;
+     background: url(resources/done.svg) no-repeat center center/30px 30px;
+     cursor: pointer;
+   }
    #showscore{
     font-size:18px ;
     border: none;

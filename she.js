@@ -68,15 +68,22 @@ window.onload = () => {
         }
     }
     ranks(snake.length - 5);
+    changeBgm();
     
 };
 eatFoodBgm = () => {
         eatBgmAudio.play();
 }
+changeBgm = () => {
+    const ensureChangeBgmButton = document.getElementById('ensureChangeBgm');
+    ensureChangeBgmButton.onclick = () => {
+        let bgmChangeIndex = bgmChange.selectedIndex;
+        let newBgm = bgmChange.options[bgmChangeIndex].value;
+        bgmAudio.src = newBgm;
+        bgmAudio.play();
+    }
+}
 controlBgm = () => {
-    let bgmChangeIndex = bgmChange.selectedIndex;
-    let newBgm = bgmChange.options[bgmChangeIndex].value;
-    bgmAudio.src = newBgm;
     bgmAudio.play();
     playOrPauseBgm.onclick = () =>{
         if(checkplayOrPauseBgm){

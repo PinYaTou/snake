@@ -9,7 +9,10 @@ var DIR = {
 var dir = DIR.DIR_RIGHT;
 var food = null;
 var timer;
+var foodDisappearTimer;
+var foodAppearTimer;
 var eatBgm = true;
+var beginOrPuase = true;
 var start = document.getElementById('start');
 var pause = document.getElementById('pause');
 var con = document.getElementById("container");
@@ -17,15 +20,10 @@ window.onload = () => {
     createFood();
     createSnake();
     start.onclick = () => {
-        clearInterval(timer);
-        let spaceIndex = spaces.selectedIndex;
-        let newSpace = spaces.options[spaceIndex].value;
-        timer = setInterval(snakeMove, newSpace);
-        controlBgm ();
+        gameBegin();
     }
     pause.onclick = () => {
-        clearInterval(timer);
-        bgmAudio.pause();
+        gamePuase();
     }
     document.onkeyup = function (e) {
         switch (e.key) {
@@ -49,10 +47,20 @@ window.onload = () => {
                     dir = DIR.DIR_RIGHT;
                 }
                 break;
+            case 'Enter':
+                if(beginOrPuase){
+                    gamePuase();
+                    beginOrPuase = false;
+                }
+                else {
+                    gameBegin();
+                    beginOrPuase = true;
+                }
+               break;
         }
     }
     ranks(snake.length - 5);
-   
+
 };
 eatFoodBgm = () => {
         eatBgmAudio.play();
@@ -122,17 +130,17 @@ gameOverOfEatSelf = () => {
     mask.style.display = 'block';
     settlementPanel.style.display = 'block';
     lastScore.innerHTML = snake.length - 5;
-    
+    reStart();
 }
 throughWall = (newLeft,newTop) => {
     let head = getSnakeHead();
-    if(newLeft > con.offsetWidth - 10 - 1) {
+    if(newLeft > con.offsetWidth - 20 ) {
         head.style.left = '-1px';
     }
     else if (newLeft < 0) {
         head.style.left = '281px';
     }
-    else if (newTop > con.offsetHeight - 10 -1){
+    else if (newTop > con.offsetHeight - 20 -1){
         head.style.top = '-1px';
     }
     else if (newTop < 0 ){
@@ -147,7 +155,7 @@ moveHead = (head,newLeft,newTop) => {
 isEatFood = (newLeft,newTop) => {
     const head = getSnakeHead();
     return (((newLeft + head.offsetWidth) > food.offsetLeft) && 
-        (newTop < (food.offsetTop + food.offsetHeight) )&&
+        (newTop < (food.offsetTop + food.offsetHeight) ) &&
         (newLeft < (food.offsetLeft + food.offsetWidth) ) &&
         ((newTop + head.offsetHeight) > food.offsetTop)
     )
@@ -157,6 +165,7 @@ foodPush = () => {
     getSnakeHead().className = 'node body';
     eatBgm && eatFoodBgm();
     snake.push(food); 
+    getSnakeHead().style.opacity = '1';
     truescore.innerHTML = snake.length - 5;
     createFood();
     return;
@@ -227,11 +236,34 @@ snakeMove = () => {
     isEatFood(obj.newLeft,obj.newTop) && foodPush();
     moveHead(getSnakeHead(),obj.newLeft,obj.newTop);
     throughWall(obj.newLeft,obj.newTop);
-    reStart();
 }
 reStart = () => {
     const reStartButton = document.getElementById('reStartButton');
     reStartButton.onclick = () => {
         window.location.reload();
     }
+}
+foodFlashing = () => {
+    clearInterval(foodDisappearTimer);
+    foodDisappearTimer = setInterval(function(){
+        food.style.opacity = '0';
+    },300);
+    clearInterval(foodAppearTimer);
+    foodAppearTimer = setInterval(function(){
+        food.style.opacity = '1';
+    },600);
+}
+gameBegin = () => {
+    clearInterval(timer);
+    let spaceIndex = spaces.selectedIndex;
+    let newSpace = spaces.options[spaceIndex].value;
+    timer = setInterval(snakeMove, newSpace);
+    controlBgm ();
+    foodFlashing();
+}
+gamePuase = () => {
+    clearInterval(timer);
+    bgmAudio.pause();
+    clearInterval(foodDisappearTimer);
+    clearInterval(foodAppearTimer);
 }

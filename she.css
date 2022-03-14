@@ -35,7 +35,7 @@
    .ensureChangeBgm {
      width: 30px;
      height: 30px;
-     background: url(resources/done.svg) no-repeat center center/30px 30px;
+     background: url(resources/icon/done.svg) no-repeat center center/30px 30px;
      cursor: pointer;
    }
    #showscore{
@@ -71,7 +71,7 @@
     height: 30px;
     left: -5px;
     bottom: -35px;
-    background: url(resources/pause.svg) no-repeat center center/40px 40px;
+    background: url(resources/icon/pause.svg) no-repeat center center/40px 40px;
     cursor: pointer;
    }
    .playAndPauseBgm {
@@ -80,7 +80,7 @@
     height: 30px;
     right: 35px;
     bottom: -35px;
-    background: url(resources/bgm-on.svg) no-repeat center center/30px 30px;
+    background: url(resources/icon/bgm-on.svg) no-repeat center center/30px 30px;
     cursor: pointer;
    }
    .playAndPauseSoundEffects {
@@ -89,7 +89,7 @@
     height: 30px;
     right: 0;
     bottom: -35px;
-    background: url(resources/music-on.svg) no-repeat center center/30px 30px;
+    background: url(resources/icon/music-on.svg) no-repeat center center/30px 30px;
     cursor: pointer;
    }
   .mask {
@@ -99,6 +99,9 @@
     z-index: 10;
     background-color: rgba(0, 0, 0, .6);
     display: none;
+   }
+   .mask.show {
+    display: block;
    }
    .mask .settlementPanel {
      position: absolute;

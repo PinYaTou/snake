@@ -1,37 +1,30 @@
 const BOX = { WIDTH: 20, HEIGHT: 20 };
-var snake = [];
-var DIR = {
+let snake = [];
+const DIR = {
     DIR_RIGHT: 1,
     DIR_LEFT: 2,
     DIR_TOP: 3,
     DIR_BOTTOM: 4
 };
-var dir = DIR.DIR_RIGHT;
-var food = null;
-var timer;
-var foodDisappearTimer;
-var foodAppearTimer;
-var eatBgm = true;
-var beginOrPuase = true;
-const playOrPauseGame = document.getElementById('playAndPauseGame');
-var checkplayOrPauseGame = true;
-const playOrPauseBgm = document.getElementById('playAndPauseBgm');
-var checkplayOrPauseBgm = true;
-const playOrPauseSoundEffects = document.getElementById('playAndPauseSoundEffects');
-var checkplayOrPauseSoundEffects = true;
-const con = document.getElementById("container");
+let dir = DIR.DIR_RIGHT;
+let food = null;
+let timer;
+let  foodDisappearTimer;
+let  foodAppearTimer;
+let  beginOrPuase = true;
+const isPauseGame = document.getElementById('playAndPauseGame');
+let  checkIsPauseGame = false;
+const isPauseBgm = document.getElementById('playAndPauseBgm');
+let  checkIsPauseBgm = false;
+const isPauseSoundEffects = document.getElementById('playAndPauseSoundEffects');
+let  checkIsPauseSoundEffects = false;
+const contain = document.getElementById("container");
 window.onload = () => {
     createFood();
     createSnake();
-    playOrPauseGame.onclick = () => {
-        if(checkplayOrPauseGame){
-             gameBegin();
-             checkplayOrPauseGame = false;
-        }
-        else {
-            gamePuase();
-            checkplayOrPauseGame = true;
-        }
+    isPauseGame.onclick = () => {
+        checkIsPauseGame = !checkIsPauseGame;
+        checkIsPauseGame === true ? gameBegin() : gamePuase();
     }
     document.onkeyup = function (e) {
         switch (e.key) {
@@ -85,28 +78,27 @@ changeBgm = () => {
 }
 controlBgm = () => {
     bgmAudio.play();
-    playOrPauseBgm.onclick = () =>{
-        if(checkplayOrPauseBgm){
+    isPauseBgm.onclick = () =>{
+
+        checkIsPauseBgm = !checkIsPauseBgm;
+
+        if(checkIsPauseBgm){
             bgmAudio.play();
-            checkplayOrPauseBgm = false;
-            playOrPauseBgm.style.background = 'url(resources/bgm-on.svg) no-repeat center center/30px 30px';
+            isPauseBgm.style.background = 'url(resources/icon/bgm-on.svg) no-repeat center center/30px 30px';
         }
         else {
             bgmAudio.pause();
-            checkplayOrPauseBgm = true;
-            playOrPauseBgm.style.background = 'url(resources/bgm-off.svg) no-repeat center center/30px 30px';
+            isPauseBgm.style.background = 'url(resources/icon/bgm-off.svg) no-repeat center center/30px 30px';
         }   
     };
-    playOrPauseSoundEffects.onclick = () => {
-        if(checkplayOrPauseSoundEffects){
-            eatBgm = true;
-            checkplayOrPauseSoundEffects = false;
-            playOrPauseSoundEffects.style.background = 'url(resources/music-on.svg) no-repeat center center/30px 30px';
+    isPauseSoundEffects.onclick = () => {
+        checkIsPauseSoundEffects = !checkIsPauseSoundEffects;
+        if(checkIsPauseSoundEffects){
+            isPauseSoundEffects.style.background = 'url(resources/icon/music-on.svg) no-repeat center center/30px 30px';
         }
         else {
-            eatBgm = false;
-            checkplayOrPauseSoundEffects = true;
-            playOrPauseSoundEffects.style.background = 'url(resources/music-off.svg) no-repeat center center/30px 30px';
+
+            isPauseSoundEffects.style.background = 'url(resources/icon/music-off.svg) no-repeat center center/30px 30px';
         }
     }
 
@@ -123,20 +115,20 @@ createFood = () => {
     food.className = "node food";    
     var left, top;
     do {
-        left = Math.floor((con.offsetWidth - 10) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
-        top = Math.floor((con.offsetHeight - 10) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
+        left = Math.floor((contain.offsetWidth - 10) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
+        top = Math.floor((contain.offsetHeight - 10) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
     } while (isInSnakeBody(left, top));
     food.style.left = left + "px";
     food.style.top = top + "px";
-    con.appendChild(food);
+    contain.appendChild(food);
 };
 createSnake = () => {
     var newBody = null;
     var left, top;
     const directionOfSnake = Math.floor(Math.random()*10);
     if(directionOfSnake >= 0 && directionOfSnake <= 4){
-        left = Math.floor((con.offsetWidth - 10 - 4 * BOX.WIDTH) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
-        top = Math.floor((con.offsetHeight - 10) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
+        left = Math.floor((contain.offsetWidth - 10 - 4 * BOX.WIDTH) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
+        top = Math.floor((contain.offsetHeight - 10) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
         for (var i = 1; i <= 5; i++) {
             newBody = document.createElement("span");
             newBody.className = 'node body';
@@ -145,14 +137,14 @@ createSnake = () => {
             if (i == 5) {
                 newBody.className = 'node head';
             }
-            con.appendChild(newBody);
+            contain.appendChild(newBody);
             snake.push(newBody);
             left += 20;
         }
     }
     else {
-        left = Math.floor((con.offsetWidth - 10 ) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
-        top = Math.floor((con.offsetHeight - 10 -4 * BOX.HEIGHT) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
+        left = Math.floor((contain.offsetWidth - 10 ) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
+        top = Math.floor((contain.offsetHeight - 10 -4 * BOX.HEIGHT) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
         for (var i = 1; i <= 5; i++) {
             newBody = document.createElement("span");
             newBody.className = 'node body';
@@ -161,7 +153,7 @@ createSnake = () => {
             if (i == 5) {
                 newBody.className = 'node head';
             }
-            con.appendChild(newBody);
+            contain.appendChild(newBody);
             snake.push(newBody);
             top += 20;
         }
@@ -175,26 +167,26 @@ isEatSelf = (newLeft,newTop) => {;
     return snake.slice(0,snake.length - 1).some(body =>
     {return body.offsetLeft === newLeft && body.offsetTop == newTop});
 }
-gameOverOfEatSelf = () => {
+gameOver = () => {
     clearInterval(timer);
-    ranks(snake.length - 5);
+    ranks(rankScores(snake.length - 5));
     const mask = document.getElementById('mask');
     const settlementPanel = document.getElementById('settlementPanel');
-    mask.style.display = 'block';
+    mask.className += ' show';
     settlementPanel.style.display = 'block';
     lastScore.innerHTML = snake.length - 5;
     bgmAudio.pause();
-    reStart();
+    initReStart();
 }
 throughWall = (newLeft,newTop) => {
     let head = getSnakeHead();
-    if(newLeft > con.offsetWidth - 10 - 6) {
+    if(newLeft > contain.offsetWidth - 10 - 6) {
         head.style.left = '0px';
     }
     else if (newLeft < 0) {
         head.style.left = '280px';
     }
-    else if (newTop > con.offsetHeight - 10 - 6){
+    else if (newTop > contain.offsetHeight - 10 - 6){
         head.style.top = '0px';
     }
     else if (newTop < 0 ){
@@ -217,7 +209,7 @@ isEatFood = (newLeft,newTop) => {
 foodPush = () => {
     food.className =  getSnakeHead().className;
     getSnakeHead().className = 'node body';
-    eatBgm && eatFoodBgm();
+    !checkIsPauseSoundEffects && eatFoodBgm();
     snake.push(food); 
     getSnakeHead().style.opacity = '1';
     truescore.innerHTML = snake.length - 5;
@@ -249,31 +241,19 @@ getLocation = (newLeft,newTop) => {
         default: break;
     }
 }
-ranks = (score) => {
-    if (score > localStorage.first) {
-        let t1 = localStorage.first;
-        let t2 = localStorage.second;
-        localStorage.first = score;
-        localStorage.second = t1;
-        localStorage.third = t2;
+rankScores = (score) => {
+    let scores = JSON.parse(localStorage.getItem('scores'));
+    if(!scores) {
+        scores = [score,0,0];
     }
-    else if (score < localStorage.first && score > localStorage.second) {
-        let t3 = localStorage.second;
-        localStorage.second = score;
-        localStorage.third = t3;
-    }
-    else if (score < localStorage.second && score > localStorage.third) {
-        localStorage.second = score;
-    }
-    else {
-        localStorage.first = localStorage.first || 0;
-        localStorage.second = localStorage.second || 0;
-        localStorage.third = localStorage.third || 0;
-    }
-
-    firstscore.innerHTML = "第一名" + localStorage.first + "分";
-    secondscore.innerHTML = "第二名" + localStorage.second + "分";
-    thirdscore.innerHTML = "第三名" + localStorage.third + "分";
+    scores = [...scores, score].sort((a,b) => (b - a)).slice(0,3);
+    localStorage.setItem('scores',JSON.stringify(scores));
+    return  scores;
+}
+ranks = (scores) => {
+    firstscore.innerHTML = "第一名" + scores[0] + "分";
+    secondscore.innerHTML = "第二名" + scores[1] + "分";
+    thirdscore.innerHTML = "第三名" + scores[2] + "分";
 }
 moveBody = () => {
     for (let i = 0; i < snake.length - 1; i++) {
@@ -285,14 +265,14 @@ snakeMove = () => {
     const {offsetTop:top ,offsetLeft:left} = getSnakeHead();
     const newTop = top, newLeft = left;
     const obj = getLocation(newLeft,newTop);
-    isEatSelf(obj.newLeft,obj.newTop) && gameOverOfEatSelf();
+    isEatSelf(obj.newLeft,obj.newTop) && gameOver();
     moveBody();
     isEatFood(obj.newLeft,obj.newTop) && foodPush();
     moveHead(getSnakeHead(),obj.newLeft,obj.newTop);
     throughWall(obj.newLeft,obj.newTop);
  
 }
-reStart = () => {
+initReStart = () => {
     const reStartButton = document.getElementById('reStartButton');
     reStartButton.onclick = () => {
         window.location.reload();
@@ -315,12 +295,12 @@ gameBegin = () => {
     timer = setInterval(snakeMove, newSpace);
     controlBgm ();
     foodFlashing();
-    playOrPauseGame.style.background = 'url(resources/play.svg) no-repeat center center/40px 40px';
+    isPauseGame.style.background = 'url(resources/icon/play.svg) no-repeat center center/40px 40px';
 }
 gamePuase = () => {
     clearInterval(timer);
     bgmAudio.pause();
     clearInterval(foodDisappearTimer);
     clearInterval(foodAppearTimer);
-    playOrPauseGame.style.background = 'url(resources/pause.svg) no-repeat center center/40px 40px';
+    isPauseGame.style.background = 'url(resources/icon/pause.svg) no-repeat center center/40px 40px';
 }

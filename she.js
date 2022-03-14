@@ -1,4 +1,4 @@
-var box = { width: 50, height: 50 };
+const BOX = { WIDTH: 20, HEIGHT: 20 };
 var snake = [];
 var DIR = {
     DIR_RIGHT: 1,
@@ -21,10 +21,11 @@ window.onload = () => {
         let spaceIndex = spaces.selectedIndex;
         let newSpace = spaces.options[spaceIndex].value;
         timer = setInterval(snakeMove, newSpace);
-        Bgm();
+        controlBgm ();
     }
     pause.onclick = () => {
         clearInterval(timer);
+        bgmAudio.pause();
     }
     document.onkeyup = function (e) {
         switch (e.key) {
@@ -53,27 +54,25 @@ window.onload = () => {
     ranks(snake.length - 5);
    
 };
-eatFoodBgn = () => {
-    openEatBgm.onclick = () => {
-        if(eatBgm == false) eatBgm = true;
-    }
-    closeEatBgm.onclick = () => {
-        if(eatBgm == true) eatBgm = false;
-    }
-    if(eatBgm ){
+eatFoodBgm = () => {
         eatBgmAudio.play();
-    }
 }
-Bgm = () => {
+controlBgm = () => {
     let bgmChangeIndex = bgmChange.selectedIndex;
     let newBgm = bgmChange.options[bgmChangeIndex].value;
     bgmAudio.src = newBgm;
-    playBgm.onclick = () =>{
+    enablePlayBgm.onclick = () =>{
         bgmAudio.play();
     };
-    pauseBgm.onclick = () => {
+    disablePlayBgm.onclick = () => {
         bgmAudio.pause();
     }
+    enableOpenEatBgm.onclick = () => {
+        eatBgm = true;
+   }
+   disableOpenEatBgm.onclick = () => {
+      eatBgm = false;
+   }
 }
 isInSnakeBody = (left, top) => {
     for (var i = 0; i < snake.length; i++) {
@@ -84,11 +83,11 @@ isInSnakeBody = (left, top) => {
 };
 createFood = () => {
     food = document.createElement("span");
-    food.className = "food";
+    food.className = "node food";
     var left, top;
     do {
-        left = Math.floor((con.offsetWidth - 2) / box.width * Math.random()) * box.width;
-        top = Math.floor((con.offsetHeight - 2) / box.height * Math.random()) * box.height;
+        left = Math.floor((con.offsetWidth - 10) / BOX.WIDTH * Math.random()) * BOX.WIDTH;
+        top = Math.floor((con.offsetHeight - 10) / BOX.HEIGHT * Math.random()) * BOX.HEIGHT;
     } while (isInSnakeBody(left, top));
     food.style.left = left + "px";
     food.style.top = top + "px";
@@ -98,11 +97,11 @@ createSnake = () => {
     var newBody = null;
     for (var i = 1; i <= 5; i++) {
         newBody = document.createElement("span");
-        newBody.className = 'snakeBody';
-        newBody.style.left = (i - 1) * box.width + "px";
+        newBody.className = 'node body';
+        newBody.style.left = (i - 1) * BOX.WIDTH + "px";
         newBody.style.top = "0px";
         if (i == 5) {
-            newBody.className = 'head headRight';
+            newBody.className = 'node head';
         }
         con.appendChild(newBody);
         snake.push(newBody);
@@ -115,7 +114,7 @@ isEatSelf = (newLeft,newTop) => {;
     return snake.slice(0,snake.length - 1).some(body =>
     {return body.offsetLeft === newLeft && body.offsetTop == newTop});
 }
-GameOverOfEatSelf = () => {
+gameOverOfEatSelf = () => {
     clearInterval(timer);
     alert("吃到自己了！");
     ranks(snake.length - 5);
@@ -123,17 +122,17 @@ GameOverOfEatSelf = () => {
 }
 throughWall = (newLeft,newTop) => {
     let head = getSnakeHead();
-    if(newLeft > con.offsetWidth - 2 - 1) {
-        head.style.left = '0px';
+    if(newLeft > con.offsetWidth - 10 - 1) {
+        head.style.left = '-1px';
     }
     else if (newLeft < 0) {
-        head.style.left = '750px';
+        head.style.left = '281px';
     }
-    else if (newTop > con.offsetHeight - 2 -1){
-        head.style.top = '0px';
+    else if (newTop > con.offsetHeight - 10 -1){
+        head.style.top = '-1px';
     }
     else if (newTop < 0 ){
-        head.style.top = '450px';
+        head.style.top = '281px';
     }
 
 }
@@ -142,16 +141,17 @@ moveHead = (head,newLeft,newTop) => {
     head.style.top = newTop + "px";
 }
 isEatFood = (newLeft,newTop) => {
-    return (newLeft == food.offsetLeft && newTop == food.offsetTop) || 
-    (newLeft == food.offsetLeft + box.width && newTop == food.offsetTop) ||
-    (newLeft == food.offsetLeft - box.width && newTop == food.offsetTop) ||
-    (newLeft == food.offsetLeft && newTop == food.offsetTop - box.height) ||
-    (newLeft == food.offsetLeft && newTop == food.offsetTop + box.height); 
+    const head = getSnakeHead();
+    return (((newLeft + head.offsetWidth) > food.offsetLeft) && 
+        (newTop < (food.offsetTop + food.offsetHeight) )&&
+        (newLeft < (food.offsetLeft + food.offsetWidth) ) &&
+        ((newTop + head.offsetHeight) > food.offsetTop)
+    )
 }
 foodPush = () => {
     food.className =  getSnakeHead().className;
-    getSnakeHead().className = 'snakeBody';
-    eatFoodBgn();
+    getSnakeHead().className = 'node body';
+    eatBgm && eatFoodBgm();
     snake.push(food); 
     truescore.innerHTML = snake.length - 5;
     createFood();
@@ -161,28 +161,27 @@ getLocation = (newLeft,newTop) => {
     switch (dir) {
         case DIR.DIR_LEFT: 
         return {
-            newLeft : newLeft - box.width,
+            newLeft : newLeft - BOX.WIDTH,
             newTop : newTop,
         }; 
         case DIR.DIR_RIGHT:
         return {
-            newLeft: newLeft + box.width,
+            newLeft: newLeft + BOX.WIDTH,
             newTop : newTop,
         };
         case DIR.DIR_TOP:
         return {
             newLeft : newLeft,
-            newTop: newTop - box.height,
+            newTop: newTop - BOX.HEIGHT,
         };
         case DIR.DIR_BOTTOM:
         return {
             newLeft : newLeft,
-            newTop : newTop + box.height,
+            newTop : newTop + BOX.HEIGHT,
         };
         default: break;
     }
 }
-
 ranks = (score) => {
     if (score > localStorage.first) {
         let t1 = localStorage.first;
@@ -209,22 +208,6 @@ ranks = (score) => {
     secondscore.innerHTML = "第二名" + localStorage.second + "分";
     thirdscore.innerHTML = "第三名" + localStorage.third + "分";
 }
-changeHead = (direction) => {
-    let head = getSnakeHead();
-    if (direction == DIR.DIR_RIGHT) {
-        head.className = 'head headRight';
-    }
-    if (direction == DIR.DIR_LEFT) {
-        head.className = 'head headLeft';
-
-    }
-    if (direction == DIR.DIR_BOTTOM) {
-        head.className = 'head headBottom';
-    }
-    if (direction == DIR.DIR_TOP) {
-        head.className = 'head headTop';
-    }
-}
 moveBody = () => {
     for (let i = 0; i < snake.length - 1; i++) {
         snake[i].style.top = snake[i + 1].offsetTop+ "px";
@@ -235,9 +218,8 @@ snakeMove = () => {
     const {offsetTop:top ,offsetLeft:left} = getSnakeHead();
     const newTop = top, newLeft = left;
     const obj = getLocation(newLeft,newTop);
-    isEatSelf(obj.newLeft,obj.newTop) && GameOverOfEatSelf();
+    isEatSelf(obj.newLeft,obj.newTop) && gameOverOfEatSelf();
     moveBody();
-    changeHead(dir);
     isEatFood(obj.newLeft,obj.newTop) && foodPush();
     moveHead(getSnakeHead(),obj.newLeft,obj.newTop);
     throughWall(obj.newLeft,obj.newTop);

@@ -20,7 +20,7 @@
             transform: translateX(-50%);
             margin-top: 80px;
         }
-        .main .headPart {
+        .main .headPart { 
             width: 560px;
             height: 55px;
             background-color: #4a752c;
@@ -129,7 +129,7 @@
             </div>
             <div class="bestScore">
                 <span id="bestScore">BEST:</span>
-                <span id="trueBestScore">0</span>
+                <span id="trueBestScore"></span>
             </div>
         </div>
 
@@ -154,6 +154,7 @@
         const gameOverTabs = document.getElementById('gameOverTab');
         const reStart = document.getElementById('reStart');
         const gameBgm = document.getElementById('bgmAudio');
+       gameBgm.volume = 0.2;
         const musicButton = document.getElementById('musicButton');
         let  isBgmPause = false;
         let direction = 'right';
@@ -167,7 +168,7 @@
             { x: 6, y: 6 },
             { x: 5, y: 6 },
             { x: 5, y: 5 },
-        ]
+        ]  
         let FOOD = {
             x: 0,
             y: 0
@@ -192,7 +193,6 @@
         }
         window.onload = function () {
             drawMap();
-            keyBoardEvent();
             getFoodLocation();   
             clickToStart();   
             ranks();  
@@ -209,7 +209,7 @@
         function drawSnake(snake) {
             for (let i = 0; i < snake.length; i++) {
                 if(snake[i].isHead){
-                    drawSnakeHeadRight(snake[i].x, snake[i].y);
+                    drawHead();
                 }
                 else{
                     drawRect(snake[i].x, snake[i].y,'#4673e9');
@@ -217,37 +217,33 @@
                 
             }
         }
-        function drawSnakeHeadRight(x , y ) {
-            imgSnakeHead.src = 'resources/snakeHeadRight.png';
-            obj.drawImage(  imgSnakeHead,
-                            LOCATION.x + x * LITTLE_CUBE_WIDTH,
-                            LOCATION.y + y * LITTLE_CUBE_WIDTH - 5,
-                            LITTLE_CUBE_WIDTH,
-                            LITTLE_CUBE_WIDTH + 10);
-        }
-        function drawSnakeHeadLeft(x , y ) {
-            imgSnakeHead.src = 'resources/snakeHeadLeft.png';
-            obj.drawImage(  imgSnakeHead,
-                            LOCATION.x + x * LITTLE_CUBE_WIDTH,
-                            LOCATION.y + y * LITTLE_CUBE_WIDTH - 5,
-                            LITTLE_CUBE_WIDTH,
-                            LITTLE_CUBE_WIDTH + 10);
-        }
-        function drawSnakeHeadUp(x , y ) {
-            imgSnakeHead.src = 'resources/snakeHeadUp.png';
-            obj.drawImage(  imgSnakeHead,
-                            LOCATION.x + x * LITTLE_CUBE_WIDTH - 5,
-                            LOCATION.y + y * LITTLE_CUBE_WIDTH ,
-                            LITTLE_CUBE_WIDTH + 10,
-                            LITTLE_CUBE_WIDTH);
-        }
-        function drawSnakeHeadDown(x , y ) {
-            imgSnakeHead.src = 'resources/snakeHeadDown.png';
-            obj.drawImage(  imgSnakeHead,
-                            LOCATION.x + x * LITTLE_CUBE_WIDTH - 5,
-                            LOCATION.y + y * LITTLE_CUBE_WIDTH,
-                            LITTLE_CUBE_WIDTH + 10,
-                            LITTLE_CUBE_WIDTH);
+        function  drawHead() {
+            const {x , y} = getHead();
+            let drawHeadOffset = {x:0 , y:0 , w:0, h:0};
+            switch(direction){
+                case 'right' :
+                imgSnakeHead.src = 'resources/snakeHeadRight.png';
+                drawHeadOffset = {x:0 , y:-5 , w: 0, h: 10};
+                break;
+                case 'left' :
+                imgSnakeHead.src = 'resources/snakeHeadLeft.png';
+                drawHeadOffset = {x:0 , y:-5 , w: 0, h: 10};
+                break;
+                case 'up' :
+                imgSnakeHead.src = 'resources/snakeHeadUp.png';
+                drawHeadOffset = {x: -5 , y: 0 , w: 10, h: 0};
+                break;
+                case 'down' :
+                imgSnakeHead.src = 'resources/snakeHeadDown.png';
+                drawHeadOffset = {x: -5 , y: 0 , w: 10, h: 0};
+                break;
+            }
+            obj.drawImage(
+                imgSnakeHead,
+                LOCATION.x + x * LITTLE_CUBE_WIDTH + drawHeadOffset.x ,
+                LOCATION.y + y * LITTLE_CUBE_WIDTH + drawHeadOffset.y,
+                LITTLE_CUBE_WIDTH + drawHeadOffset.w,
+                LITTLE_CUBE_WIDTH + drawHeadOffset.h );
         }
         function moveSnakeBody(snake) {
             for (let i = snake.length - 1; i > 0; i--) {
@@ -322,25 +318,21 @@
         }
         function moveRight() {
             const head = getHead(snake);
-            drawSnakeHeadRight(head.x , head.y);
             head.x == VERTICAL-1 ? head.x = 0 : head.x += 1;
             head.y += 0;
         }
         function moveLeft() {
             const head = getHead(snake);
-            drawSnakeHeadLeft(head.x , head.y );
             head.x == 0 ? head.x = VERTICAL-1 : head.x -= 1;
             head.y += 0;
         }
         function moveUp() {
             const head = getHead(snake);
-            drawSnakeHeadUp(head.x , head.y );
             head.y == 0 ? head.y = ROW-1 : head.y -= 1;
             head.x += 0;
         }
         function moveDown() {
             const head = getHead(snake);
-            drawSnakeHeadDown(head.x , head.y );
             head.y == ROW-1 ? head.y = 0 : head.y += 1;
             head.x += 0;
         }
@@ -408,15 +400,22 @@
         function clickToStart() {
             startButton.onclick = function() {
                 gameStart();
+                keyBoardEvent();
                 gameBgm.play();
                 startButton.className += " hide";
             }
         }
         function ranks() {
-            localStorage.bestScore = snake.length-5 > localStorage.bestScore 
-            ? snake.length-5 :localStorage.bestScore;
-            localStorage.bestScore = localStorage.bestScore || 0;
-            bestScores.innerHTML = localStorage.bestScore;
+            if(!localStorage.bestScore){
+                localStorage.bestScore = 0;
+                bestScores.innerHTML = localStorage.bestScore;
+            }
+            else {
+                localStorage.bestScore = snake.length-5 > localStorage.bestScore 
+                ? snake.length-5 :localStorage.bestScore;
+                bestScores.innerHTML = localStorage.bestScore;
+            }
+  
         }
         function musicControl  () {
             musicButton.onclick = function (){
